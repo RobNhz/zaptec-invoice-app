@@ -223,10 +223,11 @@ def generate_invoices(target_month: str | None = Query(default=None, description
 
 
 @app.get("/invoices")
-def list_invoices():
+def list_invoices()
     db = SessionLocal()
     try:
         invoices = db.query(Invoice).order_by(Invoice.generated_at.desc()).all()
         return invoices
     finally:
         db.close()
+
