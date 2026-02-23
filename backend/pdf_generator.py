@@ -1,17 +1,18 @@
-from weasyprint import HTML
 from jinja2 import Template
+from weasyprint import HTML
 
-def generate_invoice_pdf(owner, consumptions, total_amount, output_path):
+
+def generate_invoice_pdf(owner, consumptions, total_amount, output_path, period_start, period_end):
     html_template = """
     <h1>Invoice for {{ owner.name }}</h1>
     <p>{{ owner.address }}</p>
-    <p>Period: {{ start_date }} – {{ end_date }}</p>
+    <p>Period: {{ period_start }} – {{ period_end }}</p>
     <table border="1" cellspacing="0" cellpadding="4">
-        <tr><th>Month</th><th>kWh</th><th>Cost</th></tr>
+        <tr><th>Session date</th><th>kWh</th><th>Cost</th></tr>
         {% for c in consumptions %}
         <tr>
-            <td>{{ c.period_start.strftime('%B %Y') }}</td>
-            <td>{{ c.kwh_used }}</td>
+            <td>{{ c.period_start.strftime('%Y-%m-%d') }}</td>
+            <td>{{ "%.2f" | format(c.kwh_used) }}</td>
             <td>{{ "%.2f" | format(c.total_cost) }} €</td>
         </tr>
         {% endfor %}
@@ -21,9 +22,9 @@ def generate_invoice_pdf(owner, consumptions, total_amount, output_path):
     html = Template(html_template).render(
         owner=owner,
         consumptions=consumptions,
-        start_date=consumptions[0].period_start,
-        end_date=consumptions[-1].period_end,
-        total_amount=total_amount
+        period_start=period_start,
+        period_end=period_end,
+        total_amount=total_amount,
     )
     HTML(string=html).write_pdf(output_path)
     return output_path
