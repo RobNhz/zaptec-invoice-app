@@ -18,7 +18,10 @@ def authenticate_user(username, password):
     payload = {
         "grant_type": "password",
         "username": username,
-        "password": password,
+        "password": password
+    }
+    response = requests.post(TOKEN_URL, data=payload, timeout=30)
+    response.raise_for_status()
     token = response.json()
     token.setdefault("token_type", "Bearer")
     return token
