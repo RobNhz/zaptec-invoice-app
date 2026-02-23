@@ -140,6 +140,7 @@ def sync_data(payload: SyncRequest):
                     )
                     .first()
                 )
+<<<<<<< codex/build-open-source-invoicing-solution
                 if existing:
                     continue
 
@@ -147,6 +148,15 @@ def sync_data(payload: SyncRequest):
                 cost_per_kwh = float(os.getenv("COST_PER_KWH", 0.25))
                 consumption = Consumption(
                     charger_id=charger_id,
+=======
+                if already_exists:
+                    continue
+
+                kwh_used = float(s["kWh"])
+                cost_per_kwh = float(os.getenv("COST_PER_KWH", 0.25))
+                consumption = Consumption(
+                    charger_id=owner.charger_id,
+>>>>>>> main
                     period_start=start.date(),
                     period_end=end.date(),
                     kwh_used=kwh_used,
@@ -158,6 +168,7 @@ def sync_data(payload: SyncRequest):
                 inserted_count += 1
 
         db.commit()
+<<<<<<< codex/build-open-source-invoicing-solution
         return {
             "message": "Zaptec chargers and charge history synchronized.",
             "inserted": inserted_count,
@@ -168,6 +179,9 @@ def sync_data(payload: SyncRequest):
     except Exception as exc:
         db.rollback()
         raise HTTPException(status_code=502, detail=f"Sync failed: {exc}") from exc
+=======
+        return {"message": "Charging sessions refreshed.", "inserted": inserted_count}
+>>>>>>> main
     finally:
         db.close()
 
@@ -230,3 +244,7 @@ def list_invoices():
         return invoices
     finally:
         db.close()
+<<<<<<< codex/build-open-source-invoicing-solution
+=======
+
+>>>>>>> main
