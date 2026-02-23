@@ -70,3 +70,12 @@ python scripts/baseload.py --username you@example.com --history-days 180
 - **Database:** Supabase project + Postgres URL in `DATABASE_URL`.
 - **Backend:** Render/Fly.io with env vars from `backend/.env.example`.
 - **Frontend:** Vercel/Netlify with `VITE_API_URL` pointing to backend URL.
+
+
+### Vercel note (monorepo root)
+
+This repository keeps the frontend in `frontend/`. To make Vercel builds work from the repo root, the project includes:
+- root `package.json` that installs/builds the frontend via `npm --prefix frontend ...`
+- `vercel.json` with `outputDirectory: frontend/dist`
+
+So in Vercel, you can keep **Root Directory = repository root**.
