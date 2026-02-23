@@ -5,7 +5,10 @@ import requests
 
 ZAPTEC_BASE_URL = os.getenv("ZAPTEC_BASE_URL", "https://api.zaptec.com")
 TOKEN_URL = os.getenv("ZAPTEC_TOKEN_URL", f"{ZAPTEC_BASE_URL}/oauth/token")
+<<<<<<< codex/build-open-source-invoicing-solution-wtykaw
+=======
 DEFAULT_CLIENT_ID = os.getenv("ZAPTEC_CLIENT_ID", "zaptec")
+>>>>>>> main
 
 
 def _api_get(path, access_token, params=None):
@@ -20,7 +23,10 @@ def authenticate_user(username, password):
         "grant_type": "password",
         "username": username,
         "password": password,
+<<<<<<< codex/build-open-source-invoicing-solution-wtykaw
+=======
         "client_id": DEFAULT_CLIENT_ID,
+>>>>>>> main
     }
 
     response = requests.post(TOKEN_URL, data=payload, timeout=30)
