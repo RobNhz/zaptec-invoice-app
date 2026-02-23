@@ -35,6 +35,17 @@ pip install -r requirements.txt
 cp .env.example .env
 uvicorn main:app --reload
 ```
+Alternative:
+
+```bash
+uv init
+cd backend
+uv venv
+.venv\Scrupts\activate
+uv pip install -r requirements.txt
+cp .env.example .env
+uvicorn main:app --reload
+```
 
 ### 2) Frontend
 
