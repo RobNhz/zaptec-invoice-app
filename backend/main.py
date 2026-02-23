@@ -1,16 +1,17 @@
 import os
 import uuid
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel, Field
 
 from database import SessionLocal, engine
 from models import Base, Consumption, Invoice, Owner
 from pdf_generator import generate_invoice_pdf
-from zaptec_api import fetch_charger_sessions
+from zaptec_api import authenticate_user, fetch_charge_history, fetch_chargers
 
 BASE_DIR = Path(__file__).resolve().parent
 GENERATED_DIR = BASE_DIR / "generated"
@@ -27,8 +28,17 @@ app.add_middleware(
 )
 
 app.mount("/files", StaticFiles(directory=GENERATED_DIR), name="files")
-
 Base.metadata.create_all(bind=engine)
+
+
+class LoginRequest(BaseModel):
+    username: str = Field(min_length=3)
+    password: str = Field(min_length=3)
+
+
+class SyncRequest(BaseModel):
+    access_token: str = Field(min_length=10)
+    history_days: int = Field(default=90, ge=1, le=365)
 
 
 def _get_billing_period(target_month: str | None) -> tuple[date, date]:
@@ -43,36 +53,102 @@ def _get_billing_period(target_month: str | None) -> tuple[date, date]:
     return period_start, period_end
 
 
+def _extract_session_bounds(entry):
+    start_value = entry.get("StartDateTime") or entry.get("StartDate")
+    end_value = entry.get("EndDateTime") or entry.get("EndDate") or start_value
+    if not start_value:
+        return None, None
+    try:
+        start = datetime.fromisoformat(start_value.replace("Z", "+00:00"))
+        end = datetime.fromisoformat(end_value.replace("Z", "+00:00"))
+        return start, end
+    except ValueError:
+        return None, None
+
+
+def _extract_kwh(entry):
+    if entry.get("KWh") is not None:
+        return float(entry["KWh"])
+    if entry.get("kWh") is not None:
+        return float(entry["kWh"])
+    if entry.get("Energy") is not None:
+        return float(entry["Energy"])
+    return 0.0
+
+
 @app.get("/health")
 def health():
     return {"status": "ok"}
 
 
-@app.post("/refresh")
-def refresh_data():
+@app.post("/auth/login")
+def login(payload: LoginRequest):
+    try:
+        token = authenticate_user(payload.username, payload.password)
+        return {
+            "access_token": token.get("access_token"),
+            "token_type": token.get("token_type", "Bearer"),
+            "expires_in": token.get("expires_in", 3600),
+        }
+    except Exception as exc:
+        raise HTTPException(status_code=401, detail=f"Zaptec login failed: {exc}") from exc
+
+
+@app.post("/sync")
+def sync_data(payload: SyncRequest):
     db = SessionLocal()
     inserted_count = 0
+    owners_created = 0
 
     try:
-        owners = db.query(Owner).all()
-        if not owners:
-            return {"message": "No owners configured. Add owners to the owners table first.", "inserted": 0}
+        chargers = fetch_chargers(payload.access_token)
+        if not chargers:
+            return {"message": "No chargers found for this Zaptec account.", "inserted": 0, "owners_created": 0}
 
-        for owner in owners:
-            sessions = fetch_charger_sessions(owner.charger_id)
-            for s in sessions:
-                start = datetime.fromisoformat(s["StartDate"])
-                end = datetime.fromisoformat(s["EndDate"])
+        history_from = datetime.now(timezone.utc) - timedelta(days=payload.history_days)
 
-                already_exists = (
+        for charger in chargers:
+            charger_id = str(charger.get("Id") or charger.get("id") or "")
+            if not charger_id:
+                continue
+
+            existing_owner = db.query(Owner).filter(Owner.charger_id == charger_id).first()
+            if not existing_owner:
+                owner = Owner(
+                    owner_id=charger_id,
+                    name=charger.get("Name") or f"Charger {charger_id}",
+                    address=charger.get("Address") or "",
+                    phone="",
+                    charger_id=charger_id,
+                    last_month_used=date.today(),
+                )
+                db.add(owner)
+                owners_created += 1
+
+            history_entries = fetch_charge_history(payload.access_token, charger_id, start_time=history_from)
+            for entry in history_entries:
+                start, end = _extract_session_bounds(entry)
+                if not start or not end:
+                    continue
+
+                existing = (
                     db.query(Consumption)
                     .filter(
-                        Consumption.charger_id == owner.charger_id,
+                        Consumption.charger_id == charger_id,
                         Consumption.period_start == start.date(),
                         Consumption.period_end == end.date(),
                     )
                     .first()
                 )
+<<<<<<< codex/build-open-source-invoicing-solution
+                if existing:
+                    continue
+
+                kwh_used = _extract_kwh(entry)
+                cost_per_kwh = float(os.getenv("COST_PER_KWH", 0.25))
+                consumption = Consumption(
+                    charger_id=charger_id,
+=======
                 if already_exists:
                     continue
 
@@ -80,6 +156,7 @@ def refresh_data():
                 cost_per_kwh = float(os.getenv("COST_PER_KWH", 0.25))
                 consumption = Consumption(
                     charger_id=owner.charger_id,
+>>>>>>> main
                     period_start=start.date(),
                     period_end=end.date(),
                     kwh_used=kwh_used,
@@ -91,7 +168,20 @@ def refresh_data():
                 inserted_count += 1
 
         db.commit()
+<<<<<<< codex/build-open-source-invoicing-solution
+        return {
+            "message": "Zaptec chargers and charge history synchronized.",
+            "inserted": inserted_count,
+            "owners_created": owners_created,
+        }
+    except HTTPException:
+        raise
+    except Exception as exc:
+        db.rollback()
+        raise HTTPException(status_code=502, detail=f"Sync failed: {exc}") from exc
+=======
         return {"message": "Charging sessions refreshed.", "inserted": inserted_count}
+>>>>>>> main
     finally:
         db.close()
 
@@ -154,4 +244,7 @@ def list_invoices():
         return invoices
     finally:
         db.close()
+<<<<<<< codex/build-open-source-invoicing-solution
+=======
 
+>>>>>>> main

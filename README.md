@@ -1,10 +1,10 @@
 # Zaptec Invoice App
 
 Open-source online invoicing for EV charging that:
-- extracts user charging sessions from Zaptec/OCPP-compatible APIs,
-- stores session/invoice metadata in a free cloud Postgres database (Supabase free tier),
-- generates monthly invoice PDFs,
-- exposes all operations from a management frontend.
+- logs in with a personal Zaptec account,
+- pulls chargers and charge history from Zaptec APIs,
+- stores session/invoice metadata in a cloud Postgres database (Supabase free tier),
+- generates monthly invoice PDFs from a web management UI.
 
 ## Architecture
 
@@ -13,9 +13,15 @@ Open-source online invoicing for EV charging that:
 - **Database:** Supabase Postgres free tier via `DATABASE_URL`.
 - **PDF engine:** WeasyPrint in backend.
 
-The frontend triggers both key workflows:
-1. **Extract charging data** → calls `POST /refresh`.
-2. **Generate monthly PDFs** → calls `POST /generate-invoices?target_month=YYYY-MM`.
+## User Flow
+
+1. User logs in on the start page using Zaptec username + password.
+2. Frontend exchanges credentials via backend `POST /auth/login` and receives an access token.
+3. User opens dashboard and runs `POST /sync` to import:
+   - charger list (`GET /api/chargers`)
+   - charger load history (`GET /api/chargehistory`)
+4. User generates monthly PDFs with `POST /generate-invoices?target_month=YYYY-MM`.
+5. Invoices are listed in dashboard and served from `GET /files/{invoice_id}.pdf`.
 
 ## Local Setup
 
@@ -38,31 +44,29 @@ npm install
 npm run dev
 ```
 
-### 3) Seed owners in database
+## Baseload Script
 
-Add rows to `owners` table (at least `owner_id`, `name`, `address`, and `charger_id`).
+Initialize chargers + charge history into your DB:
+
+```bash
+cd backend
+python scripts/baseload.py --username you@example.com --history-days 180
+```
+
+- password is read from `ZAPTEC_PASSWORD` env var or prompted interactively.
+- script creates missing owners using charger metadata and inserts missing consumption rows.
 
 ## API Endpoints
 
-- `GET /health` - service health check.
-- `POST /refresh` - fetch sessions from OCPP/Zaptec and insert missing consumptions.
+- `GET /health` - health check.
+- `POST /auth/login` - Zaptec credential login; returns access token.
+- `POST /sync` - sync chargers and charge history into DB.
 - `POST /generate-invoices?target_month=YYYY-MM` - generate invoice PDFs for one month.
 - `GET /invoices` - list generated invoices.
 - `GET /files/{invoice_id}.pdf` - open generated PDF.
 
 ## Deployment (free tiers)
 
-- **Database:** Supabase project + Postgres URL in backend `DATABASE_URL`.
+- **Database:** Supabase project + Postgres URL in `DATABASE_URL`.
 - **Backend:** Render/Fly.io with env vars from `backend/.env.example`.
-- **Frontend:** Vercel/Netlify with `VITE_API_URL` pointing to your backend URL.
-
-## Notes on OCPP
-
-Set `OCPP_API_URL` to your OCPP middleware endpoint implementing:
-
-`GET /chargers/{charger_id}/sessions` returning items with:
-- `StartDate` (ISO datetime)
-- `EndDate` (ISO datetime)
-- `kWh` (number)
-
-If `OCPP_API_URL` is not configured, the app falls back to Zaptec API (`ZAPTEC_API_KEY`).
+- **Frontend:** Vercel/Netlify with `VITE_API_URL` pointing to backend URL.
