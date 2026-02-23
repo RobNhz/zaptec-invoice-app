@@ -1,34 +1,63 @@
 import os
+from datetime import datetime, timedelta, timezone
 
 import requests
 
-ZAPTEC_BASE_URL = "https://api.zaptec.com/api"
-ZAPTEC_API_KEY = os.getenv("ZAPTEC_API_KEY")
-OCPP_API_URL = os.getenv("OCPP_API_URL")
-OCPP_API_TOKEN = os.getenv("OCPP_API_TOKEN")
+ZAPTEC_BASE_URL = os.getenv("ZAPTEC_BASE_URL", "https://api.zaptec.com")
+TOKEN_URL = os.getenv("ZAPTEC_TOKEN_URL", f"{ZAPTEC_BASE_URL}/oauth/token")
+DEFAULT_CLIENT_ID = os.getenv("ZAPTEC_CLIENT_ID", "zaptec")
 
 
-def _fetch_from_ocpp(charger_id):
-    if not OCPP_API_URL:
-        return None
-
-    headers = {"Authorization": f"Bearer {OCPP_API_TOKEN}"} if OCPP_API_TOKEN else {}
-    url = f"{OCPP_API_URL.rstrip('/')}/chargers/{charger_id}/sessions"
-    response = requests.get(url, headers=headers, timeout=30)
+def _api_get(path, access_token, params=None):
+    headers = {"Authorization": f"Bearer {access_token}"}
+    response = requests.get(f"{ZAPTEC_BASE_URL}{path}", headers=headers, params=params, timeout=30)
     response.raise_for_status()
     return response.json()
 
 
-def _fetch_from_zaptec(charger_id):
-    if not ZAPTEC_API_KEY:
-        raise RuntimeError("Missing ZAPTEC_API_KEY. Configure OCPP_API_URL or ZAPTEC_API_KEY.")
+def authenticate_user(username, password):
+    payload = {
+        "grant_type": "password",
+        "username": username,
+        "password": password,
+        "client_id": DEFAULT_CLIENT_ID,
+    }
 
-    headers = {"Authorization": f"Bearer {ZAPTEC_API_KEY}"}
-    url = f"{ZAPTEC_BASE_URL}/chargers/{charger_id}/sessions"
-    response = requests.get(url, headers=headers, timeout=30)
+    response = requests.post(TOKEN_URL, data=payload, timeout=30)
     response.raise_for_status()
-    return response.json()
+    token = response.json()
+    token.setdefault("token_type", "Bearer")
+    return token
 
 
-def fetch_charger_sessions(charger_id):
-    return _fetch_from_ocpp(charger_id) or _fetch_from_zaptec(charger_id)
+def fetch_chargers(access_token):
+    response = _api_get("/api/chargers", access_token)
+    if isinstance(response, list):
+        return response
+
+    for key in ("Data", "data", "Items", "items"):
+        if isinstance(response, dict) and isinstance(response.get(key), list):
+            return response[key]
+    return []
+
+
+def fetch_charge_history(access_token, charger_id, start_time=None, end_time=None):
+    if not end_time:
+        end_time = datetime.now(timezone.utc)
+    if not start_time:
+        start_time = end_time - timedelta(days=90)
+
+    params = {
+        "ChargerId": charger_id,
+        "From": start_time.isoformat(),
+        "To": end_time.isoformat(),
+    }
+    response = _api_get("/api/chargehistory", access_token, params=params)
+
+    if isinstance(response, list):
+        return response
+
+    for key in ("Data", "data", "Items", "items"):
+        if isinstance(response, dict) and isinstance(response.get(key), list):
+            return response[key]
+    return []
