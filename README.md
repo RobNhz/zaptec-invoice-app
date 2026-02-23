@@ -16,11 +16,7 @@ Open-source online invoicing for EV charging that:
 ## User Flow
 
 1. User logs in on the start page using Zaptec username + password.
-<<<<<<< codex/build-open-source-invoicing-solution-wtykaw
-2. Frontend exchanges credentials via backend `POST /auth/login` and receives an access token (password grant without `client_id`).
-=======
 2. Frontend exchanges credentials via backend `POST /auth/login` and receives an access token.
->>>>>>> main
 3. User opens dashboard and runs `POST /sync` to import:
    - charger list (`GET /api/chargers`)
    - charger load history (`GET /api/chargehistory`)
@@ -39,20 +35,17 @@ pip install -r requirements.txt
 cp .env.example .env
 uvicorn main:app --reload
 ```
-<<<<<<< codex/build-open-source-invoicing-solution-wtykaw
-=======
 Alternative:
 
 ```bash
 uv init
 cd backend
 uv venv
-.venv\Scrupts\activate
+.venv\Scripts\activate
 uv pip install -r requirements.txt
 cp .env.example .env
 uvicorn main:app --reload
 ```
->>>>>>> main
 
 ### 2) Frontend
 
