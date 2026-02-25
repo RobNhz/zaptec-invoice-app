@@ -1,4 +1,9 @@
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_PUBLISHABLE_KEY =
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+let supabaseClient = null;
 
 async function parseResponse(res) {
   const body = await res.text();
@@ -17,6 +22,39 @@ async function parseResponse(res) {
 
 export function getApiUrl() {
   return API_URL;
+}
+
+export function createSupabaseConnection(projectUrl, publishableKey) {
+  if (!projectUrl || !publishableKey) {
+    throw new Error("Supabase connection requires both project URL and publishable key.");
+  }
+
+  const baseUrl = projectUrl.replace(/\/$/, "");
+
+  return {
+    projectUrl: baseUrl,
+    publishableKey,
+    async request(path, options = {}) {
+      const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+      const response = await fetch(`${baseUrl}${normalizedPath}`, {
+        ...options,
+        headers: {
+          apikey: publishableKey,
+          Authorization: `Bearer ${publishableKey}`,
+          ...(options.headers || {}),
+        },
+      });
+
+      return parseResponse(response);
+    },
+  };
+}
+
+export function getSupabaseClient() {
+  if (!supabaseClient) {
+    supabaseClient = createSupabaseConnection(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+  }
+  return supabaseClient;
 }
 
 export async function loginZaptec(username, password) {
