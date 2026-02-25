@@ -120,8 +120,10 @@ python scripts/baseload.py --username you@example.com --history-days 180
 
 ## Deployment (free tiers)
 
+
+If `CORS_ORIGINS` is left as `*`, the backend will allow all origins without credentials. For production, set explicit frontend origin(s).
 - **Database:** Supabase project + Postgres URL in `DATABASE_URL`.
-- **Backend:** Render/Fly.io with env vars from `backend/.env.example`.
+- **Backend:** Render/Fly.io with env vars from `backend/.env.example` (set `CORS_ORIGINS` to your frontend domain in production).
 - **Frontend:** Vercel/Netlify with `VITE_API_URL` pointing to backend URL.
 
 
