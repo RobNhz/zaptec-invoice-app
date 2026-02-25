@@ -1,8 +1,0 @@
-fastapi
-uvicorn
-psycopg2-binary
-sqlalchemy
-requests
-weasyprint
-jinja2
-python-dotenv
