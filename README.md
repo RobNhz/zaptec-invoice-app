@@ -55,6 +55,12 @@ npm install
 npm run dev
 ```
 
+Set these frontend environment variables (for browser Supabase API access):
+- `VITE_SUPABASE_URL` = your Supabase Project URL
+- `VITE_SUPABASE_PUBLISHABLE_KEY` = your Supabase publishable (anon) key
+- optional fallback: `VITE_SUPABASE_ANON_KEY`
+
+
 ## Baseload Script
 
 Initialize chargers + charge history into your DB:
