@@ -15,7 +15,7 @@ async function parseResponse(res) {
   }
 
   if (!res.ok) {
-    throw new Error(data.detail || data.message || `Request failed (${res.status})`);
+    throw new Error(data.error_description || data.msg || data.detail || data.message || `Request failed (${res.status})`);
   }
   return data;
 }
@@ -30,22 +30,89 @@ export function createSupabaseConnection(projectUrl, publishableKey) {
   }
 
   const baseUrl = projectUrl.replace(/\/$/, "");
+  let accessToken = null;
+
+  const withAuthHeaders = (headers = {}) => ({
+    apikey: publishableKey,
+    Authorization: `Bearer ${accessToken || publishableKey}`,
+    ...headers,
+  });
+
+  const request = async (path, options = {}) => {
+    const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+    const response = await fetch(`${baseUrl}${normalizedPath}`, {
+      ...options,
+      headers: withAuthHeaders(options.headers),
+    });
+
+    return parseResponse(response);
+  };
 
   return {
     projectUrl: baseUrl,
     publishableKey,
-    async request(path, options = {}) {
-      const normalizedPath = path.startsWith("/") ? path : `/${path}`;
-      const response = await fetch(`${baseUrl}${normalizedPath}`, {
-        ...options,
-        headers: {
-          apikey: publishableKey,
-          Authorization: `Bearer ${publishableKey}`,
-          ...(options.headers || {}),
+    get accessToken() {
+      return accessToken;
+    },
+    setAccessToken(token) {
+      accessToken = token || null;
+    },
+    clearAccessToken() {
+      accessToken = null;
+    },
+    request,
+    from(table, { schema = "public" } = {}) {
+      const encodedTable = encodeURIComponent(table);
+      return {
+        select(query = "*", options = {}) {
+          const encodedQuery = encodeURIComponent(query);
+          return request(`/rest/v1/${encodedTable}?select=${encodedQuery}`, {
+            ...options,
+            method: options.method || "GET",
+            headers: {
+              Accept: "application/json",
+              ...(options.headers || {}),
+              "Accept-Profile": schema,
+            },
+          });
         },
-      });
-
-      return parseResponse(response);
+        insert(values, options = {}) {
+          return request(`/rest/v1/${encodedTable}`, {
+            ...options,
+            method: options.method || "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Prefer: "return=representation",
+              ...(options.headers || {}),
+              "Content-Profile": schema,
+            },
+            body: JSON.stringify(values),
+          });
+        },
+      };
+    },
+    auth: {
+      async signInWithPassword(email, password) {
+        const data = await request("/auth/v1/token?grant_type=password", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+        accessToken = data?.access_token || null;
+        return data;
+      },
+      async signUp(email, password) {
+        return request("/auth/v1/signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+      },
+      async signOut() {
+        const result = await request("/auth/v1/logout", { method: "POST" });
+        accessToken = null;
+        return result;
+      },
     },
   };
 }
