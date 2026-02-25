@@ -1,4 +1,8 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const DEFAULT_API_URL =
+  typeof window !== "undefined"
+    ? `${window.location.protocol}//${window.location.hostname}:8000`
+    : "http://localhost:8000";
+const API_URL = import.meta.env.VITE_API_URL || DEFAULT_API_URL;
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_PUBLISHABLE_KEY =
   import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -23,6 +27,18 @@ async function parseResponse(res) {
 export function getApiUrl() {
   return API_URL;
 }
+
+async function fetchApi(path, options = {}) {
+  try {
+    return await fetch(`${API_URL}${path}`, options);
+  } catch (error) {
+    if (error instanceof TypeError) {
+      throw new Error(`Cannot reach backend API (${API_URL}). Check VITE_API_URL and backend CORS settings.`);
+    }
+    throw error;
+  }
+}
+
 
 export function createSupabaseConnection(projectUrl, publishableKey) {
   if (!projectUrl || !publishableKey) {
@@ -125,7 +141,7 @@ export function getSupabaseClient() {
 }
 
 export async function loginZaptec(username, password) {
-  const res = await fetch(`${API_URL}/auth/login`, {
+  const res = await fetchApi(`/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, password }),
@@ -134,7 +150,7 @@ export async function loginZaptec(username, password) {
 }
 
 export async function syncData(accessToken, historyDays = 90) {
-  const res = await fetch(`${API_URL}/sync`, {
+  const res = await fetchApi(`/sync`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ access_token: accessToken, history_days: historyDays }),
@@ -144,11 +160,11 @@ export async function syncData(accessToken, historyDays = 90) {
 
 export async function generateInvoices(targetMonth) {
   const query = targetMonth ? `?target_month=${targetMonth}` : "";
-  const res = await fetch(`${API_URL}/generate-invoices${query}`, { method: "POST" });
+  const res = await fetchApi(`/generate-invoices${query}`, { method: "POST" });
   return parseResponse(res);
 }
 
 export async function getInvoices() {
-  const res = await fetch(`${API_URL}/invoices`);
+  const res = await fetchApi(`/invoices`);
   return parseResponse(res);
 }

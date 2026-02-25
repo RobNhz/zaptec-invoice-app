@@ -40,7 +40,7 @@ Default backend `.env.example` values include:
 - `ZAPTEC_BASE_URL=https://api.zaptec.com`
 - `ZAPTEC_TOKEN_URL=https://api.zaptec.com/oauth/token`
 - `COST_PER_KWH=2`
-- `CORS_ORIGINS=http://localhost:5173`
+- `CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173`
 Alternative:
 
 ```bash
@@ -89,7 +89,7 @@ VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_bPHMaKGwnmeyZjUtPIdwWg_77pOYgZj
 ZAPTEC_BASE_URL=https://api.zaptec.com
 ZAPTEC_TOKEN_URL=https://api.zaptec.com/oauth/token
 COST_PER_KWH=2
-CORS_ORIGINS=http://localhost:5173
+CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
 ```
 
 Then run backend + frontend and verify:
