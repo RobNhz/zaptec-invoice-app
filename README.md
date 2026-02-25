@@ -35,6 +35,12 @@ pip install -r requirements.txt
 cp .env.example .env
 uvicorn main:app --reload
 ```
+
+Default backend `.env.example` values include:
+- `ZAPTEC_BASE_URL=https://api.zaptec.com`
+- `ZAPTEC_TOKEN_URL=https://api.zaptec.com/oauth/token`
+- `COST_PER_KWH=2`
+- `CORS_ORIGINS=http://localhost:5173`
 Alternative:
 
 ```bash
@@ -54,6 +60,42 @@ cd frontend
 npm install
 npm run dev
 ```
+
+Copy frontend env template and set values:
+
+```bash
+cd frontend
+cp .env.example .env
+```
+
+Frontend variables:
+- `VITE_API_URL` (for local dev: `http://localhost:8000`)
+- `VITE_SUPABASE_URL` (Project URL, e.g. `https://lygfrrytqvpbxkxfvlaq.supabase.co`)
+- `VITE_SUPABASE_PUBLISHABLE_KEY`
+- optional fallback: `VITE_SUPABASE_ANON_KEY`
+
+The frontend uses direct Supabase HTTP APIs (no SDK dependency):
+- `supabase.auth.signInWithPassword(email, password)` -> `/auth/v1/token`
+- `supabase.from("table").select()` / `insert()` -> `/rest/v1/*`
+
+
+## End-to-End Smoke Test
+
+Use the provided local/dev values:
+
+```env
+VITE_SUPABASE_URL=https://lygfrrytqvpbxkxfvlaq.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_bPHMaKGwnmeyZjUtPIdwWg_77pOYgZj
+ZAPTEC_BASE_URL=https://api.zaptec.com
+ZAPTEC_TOKEN_URL=https://api.zaptec.com/oauth/token
+COST_PER_KWH=2
+CORS_ORIGINS=http://localhost:5173
+```
+
+Then run backend + frontend and verify:
+- backend `GET /health` returns `{"status":"ok"}`
+- frontend loads at `http://localhost:5173`
+- invoice list endpoint returns valid JSON (empty list on fresh DB is expected).
 
 ## Baseload Script
 
