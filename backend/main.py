@@ -19,10 +19,21 @@ GENERATED_DIR.mkdir(exist_ok=True)
 
 app = FastAPI(title="Zaptec Invoice API")
 
+default_origins = "http://localhost:5173,http://127.0.0.1:5173"
+cors_origins = [origin.strip() for origin in os.getenv("CORS_ORIGINS", default_origins).split(",") if origin.strip()]
+
+# Local dev convenience: treat localhost and 127.0.0.1 as equivalent frontend origins.
+if "http://localhost:5173" in cors_origins and "http://127.0.0.1:5173" not in cors_origins:
+    cors_origins.append("http://127.0.0.1:5173")
+if "http://127.0.0.1:5173" in cors_origins and "http://localhost:5173" not in cors_origins:
+    cors_origins.append("http://localhost:5173")
+
+allow_all_origins = "*" in cors_origins
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=os.getenv("CORS_ORIGINS", "*").split(","),
-    allow_credentials=True,
+    allow_origins=cors_origins,
+    allow_credentials=not allow_all_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
