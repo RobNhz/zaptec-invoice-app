@@ -3,3 +3,4 @@ frontend/dist/
 backend/__pycache__/
 *.pyc
 .env
+.env.example
