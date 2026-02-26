@@ -63,6 +63,7 @@ def main():
         chargers = fetch_chargers(access_token)
         for charger in chargers:
             charger_id = str(charger.get("Id") or charger.get("id") or "")
+#            charger_id = str(charger.get("deviceId") or "")
             if not charger_id:
                 continue
 

@@ -8,7 +8,8 @@ TOKEN_URL = os.getenv("ZAPTEC_TOKEN_URL", f"{ZAPTEC_BASE_URL}/oauth/token")
 
 
 def _api_get(path, access_token, params=None):
-    headers = {"Authorization": f"Bearer {access_token}"}
+#    headers = {"Authorization": f"Bearer {access_token}"}
+    headers = {"accept": "text/plain","authorization": f"Bearer {access_token}"}
     response = requests.post(f"{ZAPTEC_BASE_URL}{path}", headers=headers, params=params, timeout=30)
     response.raise_for_status()
     return response.json()
