@@ -20,7 +20,7 @@ GENERATED_DIR.mkdir(exist_ok=True)
 app = FastAPI(title="Zaptec Invoice API")
 
 #default_origins = "http://localhost:5173,http://127.0.0.1:5173"
-default_origins = "https://zaptec-invoice-app.onrender.com,http://localhost:5173,http://127.0.0.1:5173"
+default_origins = "https://zaptec-invoice-app.vercel.app,https://zaptec-invoice-app.onrender.com,http://localhost:5173,http://127.0.0.1:5173"
 cors_origins = [origin.strip() for origin in os.getenv("CORS_ORIGINS", default_origins).split(",") if origin.strip()]
 
 # Local dev convenience: treat localhost and 127.0.0.1 as equivalent frontend origins.
