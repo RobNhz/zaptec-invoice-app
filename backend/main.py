@@ -2,7 +2,9 @@ import os
 import uuid
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
+from urllib.parse import quote
 
+import requests
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -68,6 +70,83 @@ def _extract_session_bounds(entry):
     except ValueError:
         return None, None
 
+
+
+
+SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
+SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY", "")
+SUPABASE_BUCKET = os.getenv("SUPABASE_INVOICES_BUCKET", "Invoices")
+SIGNED_URL_TTL_SECONDS = int(os.getenv("SUPABASE_SIGNED_URL_TTL_SECONDS", "604800"))
+
+
+def _supabase_enabled() -> bool:
+    return bool(SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY)
+
+
+def _supabase_headers(content_type: str | None = None) -> dict[str, str]:
+    headers = {
+        "apikey": SUPABASE_SERVICE_ROLE_KEY,
+        "Authorization": f"Bearer {SUPABASE_SERVICE_ROLE_KEY}",
+    }
+    if content_type:
+        headers["Content-Type"] = content_type
+    return headers
+
+
+def _upload_invoice_to_supabase(file_path: Path, object_name: str) -> str:
+    if not _supabase_enabled():
+        return f"/files/{object_name}"
+
+    upload_url = f"{SUPABASE_URL}/storage/v1/object/{quote(SUPABASE_BUCKET)}/{quote(object_name)}"
+    with file_path.open("rb") as pdf_file:
+        response = requests.post(
+            upload_url,
+            headers={**_supabase_headers("application/pdf"), "x-upsert": "true"},
+            data=pdf_file.read(),
+            timeout=30,
+        )
+
+    if response.status_code not in {200, 201}:
+        raise HTTPException(status_code=502, detail=f"Failed to upload invoice PDF to Supabase: {response.text}")
+
+    return f"supabase://{SUPABASE_BUCKET}/{object_name}"
+
+
+def _create_signed_invoice_url(bucket: str, object_name: str) -> str:
+    sign_url = f"{SUPABASE_URL}/storage/v1/object/sign/{quote(bucket)}/{quote(object_name)}"
+    response = requests.post(
+        sign_url,
+        headers=_supabase_headers("application/json"),
+        json={"expiresIn": SIGNED_URL_TTL_SECONDS},
+        timeout=15,
+    )
+
+    if response.status_code != 200:
+        raise HTTPException(status_code=502, detail=f"Failed to create signed invoice URL: {response.text}")
+
+    payload = response.json()
+    signed_path = payload.get("signedURL")
+    if not signed_path:
+        raise HTTPException(status_code=502, detail="Supabase response missing signedURL for invoice PDF")
+
+    return f"{SUPABASE_URL}/storage/v1{signed_path}"
+
+
+def _resolve_invoice_pdf_url(stored_url: str | None) -> str | None:
+    if not stored_url:
+        return stored_url
+
+    if stored_url.startswith("supabase://"):
+        if not _supabase_enabled():
+            return stored_url
+
+        bucket_and_path = stored_url.replace("supabase://", "", 1)
+        bucket, _, object_name = bucket_and_path.partition("/")
+        if not bucket or not object_name:
+            return stored_url
+        return _create_signed_invoice_url(bucket, object_name)
+
+    return stored_url
 
 def _extract_kwh(entry):
     if entry.get("KWh") is not None:
@@ -204,13 +283,16 @@ def generate_invoices(target_month: str | None = Query(default=None, description
             pdf_path = GENERATED_DIR / f"{invoice_id}.pdf"
             generate_invoice_pdf(owner, consumptions, total_amount, str(pdf_path), period_start, period_end)
 
+            object_name = f"{invoice_id}.pdf"
+            stored_pdf_url = _upload_invoice_to_supabase(pdf_path, object_name)
+
             invoice = Invoice(
                 invoice_id=invoice_id,
                 owner_id=owner.owner_id,
                 period_start=period_start,
                 period_end=period_end,
                 total_amount=total_amount,
-                pdf_url=f"/Invoices/{invoice_id}.pdf",
+                pdf_url=stored_pdf_url,
                 generated_at=datetime.utcnow(),
             )
             db.add(invoice)
@@ -230,7 +312,19 @@ def list_invoices():
     db = SessionLocal()
     try:
         invoices = db.query(Invoice).order_by(Invoice.generated_at.desc()).all()
-        return invoices
+        result = []
+        for invoice in invoices:
+            result.append(
+                {
+                    "invoice_id": invoice.invoice_id,
+                    "owner_id": invoice.owner_id,
+                    "period_start": invoice.period_start,
+                    "period_end": invoice.period_end,
+                    "total_amount": invoice.total_amount,
+                    "pdf_url": _resolve_invoice_pdf_url(invoice.pdf_url),
+                    "generated_at": invoice.generated_at,
+                }
+            )
+        return result
     finally:
         db.close()
-        
