@@ -210,7 +210,7 @@ def generate_invoices(target_month: str | None = Query(default=None, description
                 period_start=period_start,
                 period_end=period_end,
                 total_amount=total_amount,
-                pdf_url=f"/files/{invoice_id}.pdf",
+                pdf_url=f"/Invoices/{invoice_id}.pdf",
                 generated_at=datetime.utcnow(),
             )
             db.add(invoice)

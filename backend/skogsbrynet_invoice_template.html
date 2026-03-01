@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>@import url('https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&family=Oswald:wght@200..700&display=swap');</style>
+<!-- Scipts and styles for invoice template -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@0.474.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.54.1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    html, body { font-family: 'Inter', sans-serif; color: #111827; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  </style>
+</head>
+<body class="bg-white">
+  <div class="w-full p-[20px]">
+
+    <!-- Header -->
+    <div class="flex justify-between items-start mb-2">
+      <div>
+        <img src="https://placehold.co/180x140?text=🌳🌳🌲" alt="Skogsbrynet logo with trees illustration" class="mb-2" style="width:180px; height:auto;" />
+        <p class="text-sm text-gray-700 mt-1">{{company_subtitle}}</p>
+      </div>
+      <div class="text-right">
+        <h1 class="text-6xl font-light text-gray-800" style="font-family: 'Inter', sans-serif; font-weight: 300; font-size: 56px;">Faktura</h1>
+        <p class="text-sm text-gray-600 mt-2"><span class="font-semibold">Fakturadatum:</span>&nbsp; {{invoice_date}}</p>
+      </div>
+    </div>
+
+    <!-- Sender / Receiver -->
+    <div class="flex justify-between mt-10 border-t border-gray-300 pt-4">
+      <div class="w-1/2">
+        <p class="text-xs text-gray-500 mb-1">Avsändare:</p>
+        <p class="text-sm font-bold italic">{{sender_name}}</p>
+        <p class="text-sm italic text-gray-700">{{sender_address}}</p>
+        <p class="text-sm italic text-gray-700">{{sender_postal}}</p>
+      </div>
+      <div class="w-1/2 text-left pl-16">
+        <p class="text-xs text-gray-500 mb-1">Mottagare:</p>
+        <p class="text-sm font-bold">{{receiver_name}}</p>
+        <p class="text-sm text-gray-700">{{receiver_address}}</p>
+        <p class="text-sm text-gray-700">{{receiver_postal}}</p>
+      </div>
+    </div>
+
+    <!-- Invoice details row -->
+    <div class="flex justify-between mt-10 border-t border-gray-300 pt-4 border-b pb-4" style="border-bottom: 1px solid #d1d5db;">
+      <div>
+        <p class="text-xs font-semibold text-gray-800">Fakturanr:</p>
+        <p class="text-sm text-gray-700">{{invoice_number}}</p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold text-gray-800">Laddboxnr:</p>
+        <p class="text-sm text-gray-700">{{laddbox_number}}</p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold text-gray-800">Referensnr:</p>
+        <p class="text-sm text-gray-700">{{reference_number}}</p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold text-gray-800">Förfallodatum:</p>
+        <p class="text-sm text-gray-700">{{due_date}}</p>
+      </div>
+    </div>
+
+    <!-- Meddelande -->
+    <div class="mt-6 mb-6">
+      <p class="text-sm font-bold text-gray-800">Meddelande</p>
+      <p class="text-sm text-gray-600 mt-1">{{message}}</p>
+    </div>
+
+    <!-- Specification Table -->
+    <div class="mt-4 break-inside-avoid">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="border-b-2 border-gray-800">
+            <th class="text-left py-2 font-semibold text-gray-800 w-[200px]">Specifikation</th>
+            <th class="text-right py-2 font-semibold text-gray-800 w-[100px]">Antal kWh</th>
+            <th class="text-left py-2 font-semibold text-gray-800 pl-8 w-[130px]">Mätperiod</th>
+            <th class="text-right py-2 font-semibold text-gray-800 w-[130px]">Schablonpris/kWh</th>
+            <th class="text-right py-2 font-semibold text-gray-800 w-[100px]">Total kr</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Charging rows -->
+          {{#each charging_items}}
+          <tr class="break-inside-avoid border-b border-gray-200">
+            {{#if @first}}
+            <td class="py-2 text-gray-700" rowspan="{{../charging_items_count}}">{{../charging_label}}</td>
+            {{/if}}
+            <td class="py-2 text-right text-gray-700">{{kwh}}</td>
+            <td class="py-2 text-left pl-8 text-gray-700">{{period}}</td>
+            <td class="py-2 text-right text-gray-700">{{price_per_kwh}}</td>
+            <td class="py-2 text-right text-gray-700">{{total}}</td>
+          </tr>
+          {{/each}}
+
+          <!-- Empty spacer row -->
+          <tr class="break-inside-avoid">
+            <td class="py-4" colspan="5"></td>
+          </tr>
+
+          <!-- Admin fee row -->
+          <tr class="break-inside-avoid border-b border-gray-200 border-t border-gray-200">
+            <td class="py-2 text-gray-700">{{admin_label}}</td>
+            <td class="py-2 text-right text-gray-700">{{admin_quantity}}</td>
+            <td class="py-2 text-left pl-8 text-gray-700">{{admin_period}}</td>
+            <td class="py-2 text-right text-gray-700">{{admin_price}}</td>
+            <td class="py-2 text-right text-gray-700">{{admin_total}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Totals -->
+    <div class="mt-2 break-inside-avoid">
+      <div class="flex justify-end">
+        <div class="w-[280px]">
+          <div class="flex justify-between py-1 text-sm border-b border-gray-200">
+            <span class="font-semibold text-gray-800">Summa faktura:</span>
+            <span class="text-gray-800 font-semibold">{{subtotal}}</span>
+          </div>
+          <div class="flex justify-between py-1 text-sm border-b border-gray-200">
+            <span class="font-semibold text-gray-800">Öresutjämning:</span>
+            <span class="text-gray-800">{{rounding}}</span>
+          </div>
+          <div class="flex justify-between py-3 border-b-2 border-gray-800 mt-2">
+            <span class="font-bold text-lg text-gray-900">Summa att betala:</span>
+            <span class="font-bold text-lg text-gray-900">{{total_to_pay}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-auto pt-20 break-inside-avoid">
+      <div class="flex justify-between border-t border-gray-400 pt-4">
+        <div class="w-1/3">
+          <p class="text-xs font-bold text-gray-800 mb-1">Kontaktuppgifter</p>
+          <p class="text-xs text-gray-600">{{contact_name}}</p>
+          <p class="text-xs text-gray-600">Telefon: {{contact_phone}}</p>
+          <p class="text-xs text-gray-600">E-post: {{contact_email}}</p>
+        </div>
+        <div class="w-1/3">
+          <p class="text-xs font-bold text-gray-800 mb-1">Organisationsnummer</p>
+          <p class="text-xs text-gray-600">{{org_number}}</p>
+        </div>
+        <div class="w-1/3 text-right">
+          <p class="text-xs font-bold text-gray-800 mb-1">Betalningsuppgifter</p>
+          <p class="text-xs text-gray-600">Plusgiro&nbsp; {{plusgiro}}</p>
+          <p class="text-xs text-gray-600">Bankgiro&nbsp; {{bankgiro}}</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>lucide.createIcons();</script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+{
+  "company_subtitle": "your company_subtitle here",
+  "invoice_date": "your invoice_date here",
+  "sender_name": "your sender_name here",
+  "sender_address": "your sender_address here",
+  "sender_postal": "your sender_postal here",
+  "receiver_name": "your receiver_name here",
+  "receiver_address": "your receiver_address here",
+  "receiver_postal": "your receiver_postal here",
+  "invoice_number": "your invoice_number here",
+  "laddbox_number": "your laddbox_number here",
+  "reference_number": "your reference_number here",
+  "due_date": "your due_date here",
+  "message": "your message here",
+  "admin_label": "your admin_label here",
+  "admin_quantity": "your admin_quantity here",
+  "admin_period": "your admin_period here",
+  "admin_price": "your admin_price here",
+  "admin_total": "your admin_total here",
+  "subtotal": "your subtotal here",
+  "rounding": "your rounding here",
+  "total_to_pay": "your total_to_pay here",
+  "contact_name": "your contact_name here",
+  "contact_phone": "your contact_phone here",
+  "contact_email": "your contact_email here",
+  "org_number": "your org_number here",
+  "plusgiro": "your plusgiro here",
+  "bankgiro": "your bankgiro here",
+  "charging_items": [
+    {
+      "kwh": "your kwh here",
+      "period": "your period here",
+      "price_per_kwh": "your price_per_kwh here",
+      "total": "your total here",
+      "first": "your first here",
+      "charging_items_count": "your charging_items_count here",
+      "charging_label": "your charging_label here"
+    }
+  ]
+}
