@@ -10,10 +10,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from database import SessionLocal, engine
-from models import Base, Consumption, Invoice, Owner
-from pdf_generator import generate_invoice_pdf
-from zaptec_api import authenticate_user, fetch_charge_history, fetch_chargers
+from .database import SessionLocal, engine
+from .models import Base, Consumption, Invoice, Owner
+from .pdf_generator import generate_invoice_pdf
+from .zaptec_api import authenticate_user, fetch_charge_history, fetch_chargers
 
 BASE_DIR = Path(__file__).resolve().parent
 GENERATED_DIR = BASE_DIR / "generated"
