@@ -213,13 +213,13 @@
       "degree": 9
     },
     {
-      "id": "backend_models_owner",
-      "label": "Owner",
+      "id": "backend_models_consumption",
+      "label": "Consumption",
       "degree": 7
     },
     {
-      "id": "backend_models_consumption",
-      "label": "Consumption",
+      "id": "backend_models_owner",
+      "label": "Owner",
       "degree": 7
     },
     {
@@ -233,28 +233,17 @@
       "degree": 6
     },
     {
-      "id": "backend_pdf_generator_format_currency",
-      "label": "_format_currency()",
+      "id": "backend_zaptec_api_authenticate_user",
+      "label": "authenticate_user()",
       "degree": 6
     },
     {
-      "id": "backend_pdf_generator_format_date",
-      "label": "_format_date()",
+      "id": "backend_zaptec_api_fetch_charge_history",
+      "label": "fetch_charge_history()",
       "degree": 6
     }
   ],
   "surprises": [
-    {
-      "source": "test_format_number()",
-      "target": "_format_number()",
-      "source_files": [
-        "tests/backend/test_pdf_generator.py",
-        "backend/pdf_generator.py"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "connects across different repos/directories; peripheral node `test_format_number()` unexpectedly reaches hub `_format_number()`"
-    },
     {
       "source": "test_format_currency()",
       "target": "_format_currency()",
@@ -276,6 +265,17 @@
       "confidence": "EXTRACTED",
       "relation": "calls",
       "why": "connects across different repos/directories; peripheral node `test_format_date()` unexpectedly reaches hub `_format_date()`"
+    },
+    {
+      "source": "test_format_number()",
+      "target": "_format_number()",
+      "source_files": [
+        "tests/backend/test_pdf_generator.py",
+        "backend/pdf_generator.py"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories; peripheral node `test_format_number()` unexpectedly reaches hub `_format_number()`"
     },
     {
       "source": "generate_invoices()",
@@ -303,7 +303,7 @@
   "questions": [
     {
       "type": "bridge_node",
-      "question": "Why does `generate_invoice_pdf()` connect `Community 3` to `Community 0`?",
+      "question": "Why does `generate_invoice_pdf()` connect `Zaptec Integration` to `Frontend UI`?",
       "why": "High betweenness centrality (0.032) - this node is a cross-community bridge."
     },
     {
@@ -318,12 +318,12 @@
     },
     {
       "type": "low_cohesion",
-      "question": "Should `Community 0` be split into smaller, more focused modules?",
+      "question": "Should `Frontend UI` be split into smaller, more focused modules?",
       "why": "Cohesion score 0.1164021164021164 - nodes in this community are weakly interconnected."
     },
     {
       "type": "bridge_node",
-      "question": "Why does `react` connect `Community 2` to `Community 4`?",
+      "question": "Why does `react` connect `Database Models` to `PDF Generation`?",
       "why": "High betweenness centrality (0.027) - this node is a cross-community bridge."
     },
     {
@@ -333,8 +333,8 @@
     },
     {
       "type": "verify_inferred",
-      "question": "Are the 2 inferred relationships involving `Owner` (e.g. with `generate_invoices()` and `sync_data()`) actually correct?",
-      "why": "`Owner` has 2 INFERRED edges - model-reasoned connections that need verification."
+      "question": "Are the 2 inferred relationships involving `Consumption` (e.g. with `generate_invoices()` and `sync_data()`) actually correct?",
+      "why": "`Consumption` has 2 INFERRED edges - model-reasoned connections that need verification."
     }
   ]
 }

@@ -1,12 +1,17 @@
-# Graph Report - zaptec-invoice-app  (2026-11-11)
+# Graph Report - zaptec-invoice-app  (2026-11-13)
 
 ## Corpus Check
-- Corpus is ~6,659 words - fits in a single context window. You may not need a graph.
+- cluster-only mode — file stats not available
 
 ## Summary
 - 152 nodes · 271 edges · 12 communities (8 shown, 4 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 7 edges (avg confidence: 0.94)
 - Token cost: 0 input · 0 output
+
+## Graph Freshness
+- Built from commit: `f9d3b196`
+- Run `git rev-parse HEAD` and compare to check if the graph is stale.
+- Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - Frontend UI
@@ -25,19 +30,19 @@
 2. `sync_data()` - 10 edges
 3. `generate_invoices()` - 9 edges
 4. `generate_invoice_pdf()` - 9 edges
-5. `Owner` - 7 edges
-6. `Consumption` - 7 edges
+5. `Consumption` - 7 edges
+6. `Owner` - 7 edges
 7. `App()` - 7 edges
 8. `_upload_invoice_to_supabase()` - 6 edges
-9. `_format_currency()` - 6 edges
-10. `_format_date()` - 6 edges
+9. `authenticate_user()` - 6 edges
+10. `fetch_charge_history()` - 6 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `test_format_number()` --calls--> `_format_number()`  [EXTRACTED]
-  tests/backend/test_pdf_generator.py → backend/pdf_generator.py
 - `test_format_currency()` --calls--> `_format_currency()`  [EXTRACTED]
   tests/backend/test_pdf_generator.py → backend/pdf_generator.py
 - `test_format_date()` --calls--> `_format_date()`  [EXTRACTED]
+  tests/backend/test_pdf_generator.py → backend/pdf_generator.py
+- `test_format_number()` --calls--> `_format_number()`  [EXTRACTED]
   tests/backend/test_pdf_generator.py → backend/pdf_generator.py
 - `generate_invoices()` --uses--> `Consumption`  [INFERRED]
   backend/main.py → backend/models.py
@@ -101,5 +106,5 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.027) - this node is a cross-community bridge._
 - **Are the 3 inferred relationships involving `generate_invoices()` (e.g. with `Consumption` and `Invoice`) actually correct?**
   _`generate_invoices()` has 3 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 2 inferred relationships involving `Owner` (e.g. with `generate_invoices()` and `sync_data()`) actually correct?**
-  _`Owner` has 2 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 2 inferred relationships involving `Consumption` (e.g. with `generate_invoices()` and `sync_data()`) actually correct?**
+  _`Consumption` has 2 INFERRED edges - model-reasoned connections that need verification._

@@ -1,0 +1,196 @@
+{
+  ".vscode/settings.json": {
+    "mtime": 1772031443.4519176,
+    "seen": 1794435033.9343102,
+    "ast_hash": "5115535a13079892bfdf6ee9b7f9f29c",
+    "semantic_hash": "5115535a13079892bfdf6ee9b7f9f29c",
+    "ast_empty": true
+  },
+  "backend/database.py": {
+    "mtime": 1761600824.2488105,
+    "seen": 1794435033.934316,
+    "ast_hash": "4b79b165c21f366a9676bd2011865561",
+    "semantic_hash": "4b79b165c21f366a9676bd2011865561"
+  },
+  "backend/invoice_pdf.py": {
+    "mtime": 1772125381.6693106,
+    "seen": 1794435033.9343183,
+    "ast_hash": "79270c3e5964b727e54d4bb2b37e19a2",
+    "semantic_hash": "79270c3e5964b727e54d4bb2b37e19a2"
+  },
+  "backend/main.py": {
+    "mtime": 1792860341.4907312,
+    "seen": 1794435033.9343197,
+    "ast_hash": "55ac000ed8f31b6e63b1672b00867cbf",
+    "semantic_hash": "55ac000ed8f31b6e63b1672b00867cbf"
+  },
+  "backend/models.py": {
+    "mtime": 1761600824.2488105,
+    "seen": 1794435033.9343207,
+    "ast_hash": "c2acb86a7cac1276ca48b875e53ac6c1",
+    "semantic_hash": "c2acb86a7cac1276ca48b875e53ac6c1"
+  },
+  "backend/pdf_generator.py": {
+    "mtime": 1772384589.0212479,
+    "seen": 1794435033.9343216,
+    "ast_hash": "6a211692bc3851e0102c45895516b0e7",
+    "semantic_hash": "6a211692bc3851e0102c45895516b0e7"
+  },
+  "backend/pyproject.toml": {
+    "mtime": 1771792150.2696686,
+    "seen": 1794435033.9343228,
+    "ast_hash": "3f68499301dc6d55c8ac13245bc5e67e",
+    "semantic_hash": "3f68499301dc6d55c8ac13245bc5e67e"
+  },
+  "backend/scripts/baseload.py": {
+    "mtime": 1772123709.360115,
+    "seen": 1794435033.9343238,
+    "ast_hash": "2e75909a4f6fa18b26e571bcbf1e96ef",
+    "semantic_hash": "2e75909a4f6fa18b26e571bcbf1e96ef"
+  },
+  "backend/skogsbrynet_invoice_template_variables.json": {
+    "mtime": 1772384589.0222466,
+    "seen": 1794435033.9343245,
+    "ast_hash": "360bd355dc2d1c981016a46b9eec5eab",
+    "semantic_hash": "360bd355dc2d1c981016a46b9eec5eab",
+    "ast_empty": true
+  },
+  "backend/zaptec_api.py": {
+    "mtime": 1772123961.870219,
+    "seen": 1794435033.9343255,
+    "ast_hash": "18be3d2792180c9ab4b06760c0326604",
+    "semantic_hash": "18be3d2792180c9ab4b06760c0326604"
+  },
+  "frontend/package.json": {
+    "mtime": 1761600824.2488105,
+    "seen": 1794435033.9343264,
+    "ast_hash": "b44a2355c218f9f385c69ee10c53a66b",
+    "semantic_hash": "b44a2355c218f9f385c69ee10c53a66b"
+  },
+  "frontend/src/App.jsx": {
+    "mtime": 1771855398.5279338,
+    "seen": 1794435033.9343276,
+    "ast_hash": "5b9d2f89f786be906a71cf27ab0f539f",
+    "semantic_hash": "5b9d2f89f786be906a71cf27ab0f539f"
+  },
+  "frontend/src/api.js": {
+    "mtime": 1772056979.2041583,
+    "seen": 1794435033.9343283,
+    "ast_hash": "d0a0e11b800efb1d1c01f6a44da66b8c",
+    "semantic_hash": "d0a0e11b800efb1d1c01f6a44da66b8c"
+  },
+  "frontend/src/components/InvoiceList.jsx": {
+    "mtime": 1771779017.8903008,
+    "seen": 1794435033.9343293,
+    "ast_hash": "9b5ef94916d38ae07859b945966f8fe3",
+    "semantic_hash": "9b5ef94916d38ae07859b945966f8fe3"
+  },
+  "frontend/src/components/RefreshButton.jsx": {
+    "mtime": 1761600824.2488105,
+    "seen": 1794435033.9343302,
+    "ast_hash": "899335171aa5bf33b6a58cf3ccfe4754",
+    "semantic_hash": "899335171aa5bf33b6a58cf3ccfe4754"
+  },
+  "frontend/src/main.jsx": {
+    "mtime": 1761600824.2488105,
+    "seen": 1794435033.934331,
+    "ast_hash": "2ea0cb0606d4eac53c98c04ed7f958fd",
+    "semantic_hash": "2ea0cb0606d4eac53c98c04ed7f958fd"
+  },
+  "frontend/vite.config.mjs": {
+    "mtime": 1761600824.2488105,
+    "seen": 1794435033.934332,
+    "ast_hash": "6a8e31a8aa67cea96f89b4ddf2f75292",
+    "semantic_hash": "6a8e31a8aa67cea96f89b4ddf2f75292"
+  },
+  "main.py": {
+    "mtime": 1771868745.3422096,
+    "seen": 1794435033.9343326,
+    "ast_hash": "a254d175df0d93f614c5e0b8e90e59d7",
+    "semantic_hash": "a254d175df0d93f614c5e0b8e90e59d7"
+  },
+  "package.json": {
+    "mtime": 1771932418.3100667,
+    "seen": 1794435033.9343338,
+    "ast_hash": "317cc3ec9009fa3ea8068da553364614",
+    "semantic_hash": "317cc3ec9009fa3ea8068da553364614"
+  },
+  "pyproject.toml": {
+    "mtime": 1771868745.3422096,
+    "seen": 1794435033.9343345,
+    "ast_hash": "bd9b87b3b5841d93e9a296c2302c6741",
+    "semantic_hash": "bd9b87b3b5841d93e9a296c2302c6741"
+  },
+  "tests/backend/test_api.py": {
+    "mtime": 1792870025.127655,
+    "seen": 1794435033.9343355,
+    "ast_hash": "f96d117f7292af4d0e4ea7512c4b7ca3",
+    "semantic_hash": "f96d117f7292af4d0e4ea7512c4b7ca3"
+  },
+  "tests/backend/test_pdf_generator.py": {
+    "mtime": 1792856711.4089427,
+    "seen": 1794435033.9343364,
+    "ast_hash": "40c0fcc733288d878ae074d7f3bb74b6",
+    "semantic_hash": "40c0fcc733288d878ae074d7f3bb74b6"
+  },
+  "vercel.json": {
+    "mtime": 1772057573.8891885,
+    "seen": 1794435033.9343376,
+    "ast_hash": "f929cc99a524ba96b62c0bf5d8432223",
+    "semantic_hash": "f929cc99a524ba96b62c0bf5d8432223"
+  },
+  "README.md": {
+    "mtime": 1772056979.2031586,
+    "seen": 1794435033.9343383,
+    "ast_hash": "e8a36d94420740d8d63b4ecc0df8993e",
+    "semantic_hash": "e8a36d94420740d8d63b4ecc0df8993e"
+  },
+  "backend/requirements.txt": {
+    "mtime": 1761600824.2488105,
+    "seen": 1794435033.934339,
+    "ast_hash": "52d95d5bc7cdb968e61cf9cbc1d88d88",
+    "semantic_hash": "52d95d5bc7cdb968e61cf9cbc1d88d88"
+  },
+  "backend/skogsbrynet_invoice_template.html": {
+    "mtime": 1772384589.0212479,
+    "seen": 1794435033.9343398,
+    "ast_hash": "fd7243e210bebdd3b066227cf5af6f47",
+    "semantic_hash": "fd7243e210bebdd3b066227cf5af6f47"
+  },
+  "deplyoment.md": {
+    "mtime": 1772056979.2041583,
+    "seen": 1794435033.934341,
+    "ast_hash": "1314f3877f2636aaa498c919acab99e0",
+    "semantic_hash": "1314f3877f2636aaa498c919acab99e0"
+  },
+  "frontend/index.html": {
+    "mtime": 1761600824.2488105,
+    "seen": 1794435033.9343417,
+    "ast_hash": "dd04f34aeecc07c79fed9aadebeadd28",
+    "semantic_hash": "dd04f34aeecc07c79fed9aadebeadd28"
+  },
+  "requirements.txt": {
+    "mtime": 1772057058.4412787,
+    "seen": 1794435033.9343424,
+    "ast_hash": "52d95d5bc7cdb968e61cf9cbc1d88d88",
+    "semantic_hash": "52d95d5bc7cdb968e61cf9cbc1d88d88"
+  },
+  "backend/skogsbrynet_logo_with_trees.png": {
+    "mtime": 1713955825.0,
+    "seen": 1794435033.934343,
+    "ast_hash": "a96c87a3599e7dd3a3a5f0c1f9987be2",
+    "semantic_hash": "a96c87a3599e7dd3a3a5f0c1f9987be2"
+  },
+  "mermaid-diagram.png": {
+    "mtime": 1793826997.3044572,
+    "seen": 1794435033.934344,
+    "ast_hash": "1d8b9be8aa20b8c2f7656ae7206b9473",
+    "semantic_hash": "1d8b9be8aa20b8c2f7656ae7206b9473"
+  },
+  "mermaid-diagram.svg": {
+    "mtime": 1793827008.4656963,
+    "seen": 1794435033.9343448,
+    "ast_hash": "6f7dd622a17822e6f403104a200b32c3",
+    "semantic_hash": "6f7dd622a17822e6f403104a200b32c3"
+  }
+}

@@ -1,0 +1,307 @@
+{
+  "communities": {
+    "0": [
+      "backend_main",
+      "backend_main_create_signed_invoice_url",
+      "backend_main_extract_kwh",
+      "backend_main_extract_session_bounds",
+      "backend_main_generate_invoices",
+      "backend_main_get_billing_period",
+      "backend_main_health",
+      "backend_main_list_invoices",
+      "backend_main_login",
+      "backend_main_loginrequest",
+      "backend_main_py_date",
+      "backend_main_resolve_invoice_pdf_url",
+      "backend_main_supabase_enabled",
+      "backend_main_supabase_headers",
+      "backend_main_syncrequest",
+      "backend_main_upload_invoice_to_supabase",
+      "backend_models_invoice",
+      "basemodel",
+      "fastapi",
+      "fastapi_middleware_cors",
+      "fastapi_staticfiles",
+      "get",
+      "path",
+      "post",
+      "pydantic",
+      "requests",
+      "urllib_parse",
+      "uuid"
+    ],
+    "1": [
+      "argparse",
+      "backend_database",
+      "backend_main_sync_data",
+      "backend_models",
+      "backend_models_consumption",
+      "backend_models_owner",
+      "backend_scripts_baseload",
+      "backend_scripts_baseload_extract_kwh",
+      "backend_scripts_baseload_extract_session_bounds",
+      "backend_scripts_baseload_main",
+      "backend_scripts_baseload_rationale_1",
+      "backend_zaptec_api",
+      "backend_zaptec_api_api_get",
+      "backend_zaptec_api_authenticate_user",
+      "backend_zaptec_api_fetch_charge_history",
+      "backend_zaptec_api_fetch_chargers",
+      "base",
+      "dotenv",
+      "getpass",
+      "os",
+      "sqlalchemy",
+      "sqlalchemy_ext_declarative",
+      "sqlalchemy_orm",
+      "sys"
+    ],
+    "2": [
+      "frontend_package_dependencies",
+      "frontend_package_dependencies_react",
+      "frontend_package_dependencies_react_dom",
+      "frontend_src_api",
+      "frontend_src_api_createsupabaseconnection",
+      "frontend_src_api_fetchapi",
+      "frontend_src_api_generateinvoices",
+      "frontend_src_api_getapiurl",
+      "frontend_src_api_getinvoices",
+      "frontend_src_api_getsupabaseclient",
+      "frontend_src_api_loginzaptec",
+      "frontend_src_api_parseresponse",
+      "frontend_src_api_refreshdata",
+      "frontend_src_api_syncdata",
+      "frontend_src_app",
+      "frontend_src_app_app",
+      "frontend_src_app_currentbillingmonth",
+      "frontend_src_components_invoicelist",
+      "frontend_src_components_invoicelist_invoicelist",
+      "frontend_src_components_refreshbutton",
+      "frontend_src_components_refreshbutton_refreshbutton",
+      "frontend_src_main",
+      "ref_react",
+      "ref_react_dom"
+    ],
+    "3": [
+      "backend_pdf_generator",
+      "backend_pdf_generator_build_charging_items",
+      "backend_pdf_generator_format_currency",
+      "backend_pdf_generator_format_date",
+      "backend_pdf_generator_format_number",
+      "backend_pdf_generator_generate_invoice_pdf",
+      "backend_pdf_generator_py_date",
+      "datetime",
+      "jinja2",
+      "json",
+      "pathlib",
+      "tests_backend_test_pdf_generator",
+      "tests_backend_test_pdf_generator_mockconsumption",
+      "tests_backend_test_pdf_generator_mockconsumption_init",
+      "tests_backend_test_pdf_generator_mockowner",
+      "tests_backend_test_pdf_generator_mockowner_init",
+      "tests_backend_test_pdf_generator_test_format_currency",
+      "tests_backend_test_pdf_generator_test_format_date",
+      "tests_backend_test_pdf_generator_test_format_number",
+      "tests_backend_test_pdf_generator_test_generate_invoice_pdf_logic",
+      "weasyprint"
+    ],
+    "4": [
+      "frontend_package",
+      "frontend_package_devdependencies",
+      "frontend_package_devdependencies_vite",
+      "frontend_package_devdependencies_vitejs_plugin_react",
+      "frontend_package_name",
+      "frontend_package_private",
+      "frontend_package_scripts",
+      "frontend_package_scripts_build",
+      "frontend_package_scripts_dev",
+      "frontend_package_scripts_preview",
+      "frontend_package_version",
+      "frontend_vite_config",
+      "ref_vite",
+      "ref_vitejs_plugin_react"
+    ],
+    "5": [
+      "fastapi_testclient",
+      "fixture",
+      "patch",
+      "pytest",
+      "tests_backend_test_api",
+      "tests_backend_test_api_mock_db",
+      "tests_backend_test_api_test_generate_invoices",
+      "tests_backend_test_api_test_generate_invoices_query_side_effect",
+      "tests_backend_test_api_test_health_check",
+      "tests_backend_test_api_test_sync_data",
+      "unittest_mock"
+    ],
+    "6": [
+      "package",
+      "package_devdependencies",
+      "package_devdependencies_supabase",
+      "package_name",
+      "package_private",
+      "package_scripts",
+      "package_scripts_build",
+      "package_scripts_dev",
+      "package_scripts_postinstall",
+      "package_version",
+      "ref_supabase"
+    ],
+    "7": [
+      "backend_invoice_pdf",
+      "backend_invoice_pdf_generate_invoice",
+      "reportlab_lib",
+      "reportlab_lib_pagesizes",
+      "reportlab_lib_styles",
+      "reportlab_lib_units",
+      "reportlab_pdfbase",
+      "reportlab_pdfbase_cidfonts",
+      "reportlab_pdfbase_ttfonts",
+      "reportlab_platypus"
+    ],
+    "8": [
+      "vercel",
+      "vercel_buildcommand",
+      "vercel_headers",
+      "vercel_installcommand",
+      "vercel_outputdirectory"
+    ],
+    "9": [
+      "main",
+      "main_main"
+    ],
+    "10": [
+      "pkg_backend"
+    ],
+    "11": [
+      "pkg_zaptec_invoice_app"
+    ]
+  },
+  "cohesion": {
+    "0": 0.1164021164021164,
+    "1": 0.17391304347826086,
+    "2": 0.18478260869565216,
+    "3": 0.18571428571428572,
+    "4": 0.17582417582417584,
+    "5": 0.2,
+    "6": 0.2,
+    "7": 0.2,
+    "8": 0.4,
+    "9": 1.0,
+    "10": 1.0,
+    "11": 1.0
+  },
+  "gods": [
+    {
+      "id": "backend_scripts_baseload_main",
+      "label": "main()",
+      "degree": 11
+    },
+    {
+      "id": "backend_main_sync_data",
+      "label": "sync_data()",
+      "degree": 10
+    },
+    {
+      "id": "backend_main_generate_invoices",
+      "label": "generate_invoices()",
+      "degree": 9
+    },
+    {
+      "id": "backend_pdf_generator_generate_invoice_pdf",
+      "label": "generate_invoice_pdf()",
+      "degree": 9
+    },
+    {
+      "id": "backend_models_consumption",
+      "label": "Consumption",
+      "degree": 7
+    },
+    {
+      "id": "backend_models_owner",
+      "label": "Owner",
+      "degree": 7
+    },
+    {
+      "id": "frontend_src_app_app",
+      "label": "App()",
+      "degree": 7
+    },
+    {
+      "id": "backend_main_upload_invoice_to_supabase",
+      "label": "_upload_invoice_to_supabase()",
+      "degree": 6
+    },
+    {
+      "id": "backend_zaptec_api_authenticate_user",
+      "label": "authenticate_user()",
+      "degree": 6
+    },
+    {
+      "id": "backend_zaptec_api_fetch_charge_history",
+      "label": "fetch_charge_history()",
+      "degree": 6
+    }
+  ],
+  "surprises": [
+    {
+      "source": "test_format_currency()",
+      "target": "_format_currency()",
+      "source_files": [
+        "tests/backend/test_pdf_generator.py",
+        "backend/pdf_generator.py"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories; peripheral node `test_format_currency()` unexpectedly reaches hub `_format_currency()`"
+    },
+    {
+      "source": "test_format_date()",
+      "target": "_format_date()",
+      "source_files": [
+        "tests/backend/test_pdf_generator.py",
+        "backend/pdf_generator.py"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories; peripheral node `test_format_date()` unexpectedly reaches hub `_format_date()`"
+    },
+    {
+      "source": "test_format_number()",
+      "target": "_format_number()",
+      "source_files": [
+        "tests/backend/test_pdf_generator.py",
+        "backend/pdf_generator.py"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories; peripheral node `test_format_number()` unexpectedly reaches hub `_format_number()`"
+    },
+    {
+      "source": "generate_invoices()",
+      "target": "Consumption",
+      "source_files": [
+        "backend/main.py",
+        "backend/models.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
+    },
+    {
+      "source": "generate_invoices()",
+      "target": "Owner",
+      "source_files": [
+        "backend/main.py",
+        "backend/models.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
+    }
+  ],
+  "tokens": {
+    "input": 0,
+    "output": 0
+  }
+}
